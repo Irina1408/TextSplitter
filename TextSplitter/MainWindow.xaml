@@ -1,0 +1,92 @@
+﻿<Window x:Class="TextSplitter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:textSplitter="clr-namespace:TextSplitter"
+        Title="File splitter" Height="350" Width="525">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVisibilityConverter"></BooleanToVisibilityConverter>
+        <textSplitter:NotBoolToVisibilityConverter x:Key="notBoolToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <GroupBox Header="Parameters">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton Grid.Row="0" Grid.Column="0" Content="Separate text by parts count" IsChecked="{Binding SeparateByParts, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                <RadioButton Grid.Row="0" Grid.Column="1" Content="Separate text by rows count" IsChecked="{Binding SeparateByRows, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5">
+                    <Label Content="Count"/>
+                    <TextBox Text="{Binding SeparateByCount, StringFormat=##0}" MinWidth="150"/>
+                </StackPanel>
+                <!--<CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Text file partition" IsChecked="{Binding SeparateFile}"/>-->
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="Text" Visibility="{Binding SeparateFile, Converter={StaticResource notBoolToVisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Input text" Margin="5"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="Result text" Margin="5"/>
+
+                <RichTextBox Grid.Row="1" Grid.Column="0" Name="inputText"/>
+
+                <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid Name="resultTexts">
+
+                    </Grid>
+                </ScrollViewer>
+
+                <Button Grid.Row="2" Grid.Column="0" Content="Load text from file"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="File" Visibility="{Binding SeparateFile, Converter={StaticResource boolToVisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="File path" Margin="5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FilePath}" Margin="5"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Result files alias" Margin="5"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ResFileAlias}" Margin="5"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Result files extension" Margin="5"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ResFileExtension}" Margin="5"/>
+
+            </Grid>
+        </GroupBox>
+
+        <Button Grid.Row="2" Content="Split" Click="ButtonSplit_OnClick"/>
+    </Grid>
+</Window>
